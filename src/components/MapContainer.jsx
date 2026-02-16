@@ -1,9 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import mapboxgl from "mapbox-gl";
+import { AppContext } from "../context/AppContext";
 
 export default function MapContainer({ properties }) {
 
 const mapRef = useRef();
+const markersRef = useRef([]);
+const { selectedProperty, setSelectedProperty } =
+useContext(AppContext);
 
 useEffect(() => {
 
@@ -26,12 +30,6 @@ window.mapboxMap = map;
 
 map.on("load", () => {
 
-const el = document.createElement("div");
-
-el.setAttribute("data-testid", "map-loaded");
-
-document.body.appendChild(el);
-
 properties.forEach(property => {
 
 const marker = new mapboxgl.Marker()
@@ -45,11 +43,41 @@ marker.getElement().setAttribute(
 `map-marker-${property.id}`
 );
 
+marker.getElement().addEventListener("click", () => {
+
+setSelectedProperty(property);
+
+map.flyTo({
+ center: [property.longitude, property.latitude],
+ zoom: 12
+});
+
+});
+
+markersRef.current.push(marker);
+
 });
 
 });
 
 }, []);
+
+useEffect(() => {
+
+if (!selectedProperty) return;
+
+window.mapboxMap.flyTo({
+
+center: [
+ selectedProperty.longitude,
+ selectedProperty.latitude
+],
+
+zoom: 12
+
+});
+
+}, [selectedProperty]);
 
 return <div ref={mapRef} className="map" />;
 
