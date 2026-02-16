@@ -1,0 +1,26 @@
+[
+ {
+  "id": 1,
+  "title": "Modern Loft",
+  "price": 450000,
+  "address": "San Francisco",
+  "latitude": 37.7749,
+  "longitude": -122.4194
+ },
+ {
+  "id": 2,
+  "title": "Beach House",
+  "price": 750000,
+  "address": "Los Angeles",
+  "latitude": 34.0522,
+  "longitude": -118.2437
+ },
+ {
+  "id": 3,
+  "title": "NYC Apartment",
+  "price": 900000,
+  "address": "New York",
+  "latitude": 40.7128,
+  "longitude": -74.0060
+ }
+]

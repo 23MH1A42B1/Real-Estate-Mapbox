@@ -1,0 +1,92 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full height setup */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Main container */
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 350px;
+  min-width: 300px;
+  max-width: 400px;
+  height: 100%;
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+/* Sidebar header */
+.header {
+  padding: 20px;
+  font-size: 22px;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+}
+
+/* Property card */
+.property-card {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.property-card:hover {
+  background-color: #f0f7ff;
+}
+
+.property-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.property-price {
+  color: green;
+  font-weight: bold;
+}
+
+/* Map section */
+.map-container {
+  flex: 1;
+  height: 100%;
+}
+
+/* Map itself */
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 40%;
+  }
+
+  .map-container {
+    height: 60%;
+  }
+
+}
