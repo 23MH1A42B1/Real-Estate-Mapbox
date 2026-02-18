@@ -1,16 +1,55 @@
-# React + Vite
+# Real Estate Property Finder with Mapbox Geospatial Testing
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured real estate web application built with React, Mapbox GL JS, Puppeteer, and Docker. This project allows users to search, filter, and interact with property listings using advanced geospatial features.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+### Core Functionality
+* **Interactive Mapbox Map:** Real-time property markers and synchronization.
+* **Synced Sidebar:** Property listings stay in sync with the current map view.
+* **Advanced Search:** Location autocomplete via Mapbox Geocoding API.
+* **Geospatial Filtering:** Radius-based filtering using the Haversine formula:
+    $$d = 2r \arcsin\left(\sqrt{\sin^2\left(\frac{\phi_2 - \phi_1}{2}\right) + \cos(\phi_1) \cos(\phi_2) \sin^2\left(\frac{\lambda_2 - \lambda_1}{2}\right)}\right)$$
+* **Polygon Search:** Custom boundary search using Mapbox Draw.
+* **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Testing & QA
+* **Puppeteer Integration:** End-to-end testing for map initialization.
+* **Interaction Testing:** Automated validation of autocomplete and marker clicks.
+* **Logic Verification:** Specialized tests for radius filtering and saved searches.
 
-## Expanding the ESLint configuration
+### DevOps & Deployment
+* **Dockerized:** Fully containerized environment for consistency.
+* **CI/CD Ready:** Automated integration test execution via Docker Compose.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React, Vite, Mapbox GL JS, Mapbox GL Draw |
+| **Testing** | Puppeteer, Jest |
+| **DevOps** | Docker, Docker Compose |
+
+---
+
+## 📂 Project Structure
+
+```text
+real-estate-mapbox/
+├── src/
+│   ├── components/    # Reusable UI elements
+│   ├── pages/         # Main view logic
+│   ├── context/       # State management
+│   ├── utils/         # Geospatial helpers
+│   ├── styles/        # CSS/SCSS files
+│   └── data/          # Mock property data
+├── tests/
+│   └── integration/   # Puppeteer test suites
+├── Dockerfile         # App container
+├── Dockerfile.test    # Test environment container
+├── docker-compose.yml # Orchestration
+└── package.json       # Dependencies

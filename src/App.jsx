@@ -1,9 +1,9 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Properties from "./pages/Properties.jsx";
-import PropertyDetail from "./pages/PropertyDetail.jsx";
-import SavedSearches from "./pages/SavedSearches.jsx";
+import Properties from "./pages/Properties";
+import PropertyDetail from "./pages/PropertyDetail";
+import SavedSearches from "./pages/SavedSearches";
 
 export default function App() {
 
