@@ -6,9 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test:integration": "jest tests/integration --runInBand"
+    "preview": "vite preview --port 3006",
+    "test:integration": "jest tests/integration --runInBand && node generate-report.js"
   },
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "^1.5.1",

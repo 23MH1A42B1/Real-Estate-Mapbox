@@ -1,120 +1,201 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Component Imports
 import MapContainer from "../components/MapContainer";
 import SearchBar from "../components/SearchBar";
 import RadiusSlider from "../components/RadiusSlider";
-import SaveSearchButton from "../components/SaveSearchButton";
-import AdvancedFilter from "../components/AdvancedFilter"; // Added Step 2
+import AdvancedFilter from "../components/AdvancedFilter";
 
-// Context & Utils
-import properties from "../data/properties.json";
+import propertiesData from "../data/properties.json";
+
 import { AppContext } from "../context/AppContext";
 import { getDistance } from "../utils/haversine";
 
 export default function Properties() {
+
   const navigate = useNavigate();
 
   const {
     mapCenter,
     radius,
-    selectedProperty,
-    setSelectedProperty,
     filteredProperties,
-    setFilteredProperties
+    setFilteredProperties,
+    selectedProperty,
+    setSelectedProperty
   } = useContext(AppContext);
 
-  /* GEOSPATIAL FILTERING */
+  const [viewMode, setViewMode] = useState("list");
+
   useEffect(() => {
+
     if (!mapCenter) return;
 
-    const filtered = properties.filter(property => {
+    const filtered = propertiesData.filter(property => {
+
       const distance = getDistance(
         mapCenter.lat,
         mapCenter.lng,
         property.latitude,
         property.longitude
       );
+
       return distance <= radius;
+
     });
 
     setFilteredProperties(filtered);
-  }, [mapCenter, radius, setFilteredProperties]);
 
-  const displayProperties = filteredProperties ?? properties;
+  }, [mapCenter, radius]);
+
+  const displayProperties =
+    filteredProperties ?? propertiesData;
 
   return (
-    <div className="container" data-testid="properties-container">
-      
+
+    <div
+      className="container"
+      data-testid="properties-container"
+    >
+
       {/* SIDEBAR */}
-      <div className="sidebar" data-testid="property-list">
-        <div className="header">Real Estate Properties</div>
 
+      <div
+        className="sidebar"
+        data-testid="property-list"
+      >
+
+        <div className="header">
+          Real Estate Finder
+        </div>
+
+        {/* SEARCH */}
         <SearchBar />
+
+        {/* RADIUS */}
         <RadiusSlider />
-        
-        {/* STEP 2: Advanced Filter */}
-        <AdvancedFilter properties={properties} />
-        
-        <SaveSearchButton />
 
-        <hr />
+        {/* ADVANCED FILTER */}
+        <AdvancedFilter properties={propertiesData} />
 
-        {/* STEP 3: View Toggle Button */}
-        <div className="view-controls">
-          <button className="btn-toggle" data-testid="view-toggle">
-            Toggle View
-          </button>
+        {/* VIEW TOGGLE */}
+        <button
+          data-testid="view-toggle"
+          onClick={() =>
+            setViewMode(
+              viewMode === "list"
+                ? "grid"
+                : "list"
+            )
+          }
+        >
+          Toggle View
+        </button>
+
+        {/* RESULTS COUNT */}
+
+        <div data-testid="results-count">
+          {displayProperties.length} Results
         </div>
 
         {/* PROPERTY LIST */}
-        <div className="scrollable-list">
-          {displayProperties.map(property => (
+
+        {displayProperties.map(property => (
+
+          <div
+
+            key={property.id}
+
+            className={`property-card ${
+              selectedProperty?.id === property.id
+                ? "active"
+                : ""
+            }`}
+
+            data-testid={`property-card-${property.id}`}
+
+            data-latitude={property.latitude}
+
+            data-longitude={property.longitude}
+
+            onClick={() => {
+
+              setSelectedProperty(property);
+
+              navigate(`/property/${property.id}`);
+
+            }}
+
+          >
+
             <div
-              key={property.id}
-              className="property-card"
-              data-testid={`property-card-${property.id}`}
-              onClick={() => {
-                setSelectedProperty(property);
-                navigate(`/property/${property.id}`);
-              }}
-              style={{
-                backgroundColor: selectedProperty?.id === property.id ? "#e6f2ff" : "white",
-                cursor: "pointer"
-              }}
+              className="property-title"
+              data-testid={`property-title-${property.id}`}
             >
-              <div className="property-title">{property.title}</div>
-              <div className="property-price">${property.price.toLocaleString()}</div>
-              <div>{property.address}</div>
+              {property.title}
             </div>
-          ))}
-        </div>
+
+            <div
+              className="property-price"
+              data-testid={`property-price-${property.id}`}
+            >
+              ${property.price}
+            </div>
+
+            <div
+              className="property-address"
+              data-testid={`property-address-${property.id}`}
+            >
+              {property.address}
+            </div>
+
+            <button
+              data-testid={`save-property-${property.id}`}
+            >
+              Save Property
+            </button>
+
+          </div>
+
+        ))}
+
       </div>
 
-      {/* MAP SECTION */}
-      <div className="map-wrapper">
-        {/* STEP 4: Draw Boundary Controls */}
-        <div className="map-controls">
-          <button
-            data-testid="draw-boundary-button"
-            onClick={() => window.mapboxDraw?.changeMode("draw_polygon")}
-          >
-            Draw Boundary
-          </button>
-          <button
-            data-testid="clear-boundary-button"
-            onClick={() => window.mapboxDraw?.deleteAll()}
-          >
-            Clear Boundary
-          </button>
-        </div>
 
-        <div className="map-container" data-testid="map-container">
-          <MapContainer properties={properties} />
-        </div>
+      {/* MAP SECTION */}
+
+      <div
+        className="map-container"
+        data-testid="map-container"
+      >
+
+        {/* DRAW BUTTONS */}
+
+        <button
+          data-testid="draw-boundary-button"
+          onClick={() =>
+            window.mapboxDraw &&
+            window.mapboxDraw.changeMode("draw_polygon")
+          }
+        >
+          Draw Boundary
+        </button>
+
+        <button
+          data-testid="clear-boundary-button"
+          onClick={() =>
+            window.mapboxDraw &&
+            window.mapboxDraw.deleteAll()
+          }
+        >
+          Clear Boundary
+        </button>
+
+        <MapContainer properties={propertiesData} />
+
       </div>
 
     </div>
+
   );
+
 }

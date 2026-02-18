@@ -241,3 +241,39 @@ button:hover {
  margin-top: 10px;
 
 }
+
+.detail-container {
+
+  padding: 30px;
+
+  background: white;
+
+  height: 100vh;
+
+  overflow: auto;
+
+}
+
+.detail-title {
+
+  font-size: 28px;
+
+  font-weight: bold;
+
+}
+
+.detail-price {
+
+  font-size: 22px;
+
+  color: green;
+
+  margin-bottom: 10px;
+
+}
+
+.detail-section {
+
+  margin-top: 25px;
+
+}
