@@ -70,26 +70,13 @@ DevOps:
 ## Project Structure
 
 real-estate-mapbox/
-│
-├── src/
-│ ├── components/
-│ ├── pages/
-│ ├── context/
-│ ├── data/
-│ ├── utils/
-│ └── styles/
-│
-├── tests/
-│ └── integration/
-│
-├── test-results/
-│
-├── Dockerfile
-├── Dockerfile.test
-├── docker-compose.yml
-├── package.json
-├── .env.example
-└── README.md
+├── src/                # Components, Pages, Context, Utils, Styles
+├── tests/              # Puppeteer integration tests
+├── test-results/       # Automated test reports
+├── Dockerfile          # App configuration
+├── Dockerfile.test     # Test runner configuration
+├── docker-compose.yml  # Container orchestration
+└── .env.example        # Environment template
 
 
 ---
