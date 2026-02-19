@@ -12,7 +12,6 @@ import { AppContext } from "../context/AppContext";
 import { getDistance } from "../utils/haversine";
 
 export default function Properties() {
-
   const navigate = useNavigate();
 
   const {
@@ -21,17 +20,16 @@ export default function Properties() {
     filteredProperties,
     setFilteredProperties,
     selectedProperty,
-    setSelectedProperty
+    setSelectedProperty,
+    saveProperty, // Added saveProperty from Context
   } = useContext(AppContext);
 
   const [viewMode, setViewMode] = useState("list");
 
   useEffect(() => {
-
     if (!mapCenter) return;
 
-    const filtered = propertiesData.filter(property => {
-
+    const filtered = propertiesData.filter((property) => {
       const distance = getDistance(
         mapCenter.lat,
         mapCenter.lng,
@@ -40,33 +38,18 @@ export default function Properties() {
       );
 
       return distance <= radius;
-
     });
 
     setFilteredProperties(filtered);
+  }, [mapCenter, radius, setFilteredProperties]);
 
-  }, [mapCenter, radius]);
-
-  const displayProperties =
-    filteredProperties ?? propertiesData;
+  const displayProperties = filteredProperties ?? propertiesData;
 
   return (
-
-    <div
-      className="container"
-      data-testid="properties-container"
-    >
-
+    <div className="container" data-testid="properties-container">
       {/* SIDEBAR */}
-
-      <div
-        className="sidebar"
-        data-testid="property-list"
-      >
-
-        <div className="header">
-          Real Estate Finder
-        </div>
+      <div className="sidebar" data-testid="property-list">
+        <div className="header">Real Estate Finder</div>
 
         {/* SEARCH */}
         <SearchBar />
@@ -79,123 +62,93 @@ export default function Properties() {
 
         {/* VIEW TOGGLE */}
         <button
+          className="view-toggle-btn"
           data-testid="view-toggle"
-          onClick={() =>
-            setViewMode(
-              viewMode === "list"
-                ? "grid"
-                : "list"
-            )
-          }
+          onClick={() => setViewMode(viewMode === "list" ? "grid" : "list")}
         >
-          Toggle View
+          Toggle View ({viewMode})
         </button>
 
         {/* RESULTS COUNT */}
-
-        <div data-testid="results-count">
+        <div className="results-count" data-testid="results-count">
           {displayProperties.length} Results
         </div>
 
         {/* PROPERTY LIST */}
-
-        {displayProperties.map(property => (
-
-          <div
-
-            key={property.id}
-
-            className={`property-card ${
-              selectedProperty?.id === property.id
-                ? "active"
-                : ""
-            }`}
-
-            data-testid={`property-card-${property.id}`}
-
-            data-latitude={property.latitude}
-
-            data-longitude={property.longitude}
-
-            onClick={() => {
-
-              setSelectedProperty(property);
-
-              navigate(`/property/${property.id}`);
-
-            }}
-
-          >
-
+        <div className={`property-${viewMode}`}>
+          {displayProperties.map((property) => (
             <div
-              className="property-title"
-              data-testid={`property-title-${property.id}`}
+              key={property.id}
+              className={`property-card ${
+                selectedProperty?.id === property.id ? "active" : ""
+              }`}
+              data-testid={`property-card-${property.id}`}
+              data-latitude={property.latitude}
+              data-longitude={property.longitude}
+              onClick={() => {
+                setSelectedProperty(property);
+                navigate(`/property/${property.id}`);
+              }}
             >
-              {property.title}
+              <div
+                className="property-title"
+                data-testid={`property-title-${property.id}`}
+              >
+                {property.title}
+              </div>
+
+              <div
+                className="property-price"
+                data-testid={`property-price-${property.id}`}
+              >
+                ${property.price}
+              </div>
+
+              <div
+                className="property-address"
+                data-testid={`property-address-${property.id}`}
+              >
+                {property.address}
+              </div>
+
+              <button
+                data-testid={`save-property-${property.id}`}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevents navigating to details page
+                  saveProperty(property);
+                }}
+              >
+                Save Property
+              </button>
             </div>
-
-            <div
-              className="property-price"
-              data-testid={`property-price-${property.id}`}
-            >
-              ${property.price}
-            </div>
-
-            <div
-              className="property-address"
-              data-testid={`property-address-${property.id}`}
-            >
-              {property.address}
-            </div>
-
-            <button
-              data-testid={`save-property-${property.id}`}
-            >
-              Save Property
-            </button>
-
-          </div>
-
-        ))}
-
+          ))}
+        </div>
       </div>
-
 
       {/* MAP SECTION */}
+      <div className="map-container" data-testid="map-container">
+        <div className="map-toolbar">
+          <button
+            className="toolbar-btn"
+            data-testid="draw-boundary-button"
+            onClick={() =>
+              window.mapboxDraw && window.mapboxDraw.changeMode("draw_polygon")
+            }
+          >
+            Draw Boundary
+          </button>
 
-      <div
-        className="map-container"
-        data-testid="map-container"
-      >
-
-        {/* DRAW BUTTONS */}
-
-        <button
-          data-testid="draw-boundary-button"
-          onClick={() =>
-            window.mapboxDraw &&
-            window.mapboxDraw.changeMode("draw_polygon")
-          }
-        >
-          Draw Boundary
-        </button>
-
-        <button
-          data-testid="clear-boundary-button"
-          onClick={() =>
-            window.mapboxDraw &&
-            window.mapboxDraw.deleteAll()
-          }
-        >
-          Clear Boundary
-        </button>
+          <button
+            className="toolbar-btn"
+            data-testid="clear-boundary-button"
+            onClick={() => window.mapboxDraw && window.mapboxDraw.deleteAll()}
+          >
+            Clear Boundary
+          </button>
+        </div>
 
         <MapContainer properties={propertiesData} />
-
       </div>
-
     </div>
-
   );
-
 }

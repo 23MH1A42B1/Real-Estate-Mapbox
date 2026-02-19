@@ -1,71 +1,84 @@
-import React, { createContext, useState, useEffect } from "react";
+import React,
+{
+ createContext,
+ useState
+} from "react";
 
-export const AppContext = createContext();
+export const AppContext =
+createContext();
 
-export function AppProvider({ children }) {
+export function AppProvider(
+{ children }
+) {
 
-const [mapCenter, setMapCenter] = useState({
- lat: 37.7749,
- lng: -122.4194
-});
-
-const [radius, setRadius] = useState(10000);
-
-const [selectedProperty, setSelectedProperty] =
+const [mapCenter, setMapCenter] =
 useState(null);
 
-const [filteredProperties, setFilteredProperties] =
-useState(null);
+const [radius, setRadius] =
+useState(10);
 
-const [savedSearches, setSavedSearches] =
+const [filteredProperties,
+setFilteredProperties] =
 useState([]);
 
+const [selectedProperty,
+setSelectedProperty] =
+useState(null);
 
-/*
- LOAD SAVED SEARCHES FROM LOCAL STORAGE
-*/
-useEffect(() => {
-
-const saved =
-localStorage.getItem("savedSearches");
-
-if (saved)
- setSavedSearches(JSON.parse(saved));
-
-}, []);
-
-
-/*
- SAVE TO LOCAL STORAGE
-*/
-useEffect(() => {
-
-localStorage.setItem(
-"savedSearches",
-JSON.stringify(savedSearches)
+const [savedProperties,
+setSavedProperties] =
+useState(
+JSON.parse(
+localStorage.getItem(
+"savedProperties"
+)
+) || []
 );
 
-}, [savedSearches]);
+function saveProperty(property) {
 
+const exists =
+savedProperties.find(
+p => p.id === property.id
+);
+
+if (exists) return;
+
+const updated =
+[
+...savedProperties,
+property
+];
+
+setSavedProperties(updated);
+
+localStorage.setItem(
+"savedProperties",
+JSON.stringify(updated)
+);
+
+alert("Property saved!");
+
+}
 
 return (
 
 <AppContext.Provider value={{
 
- mapCenter,
- setMapCenter,
+mapCenter,
+setMapCenter,
 
- radius,
- setRadius,
+radius,
+setRadius,
 
- selectedProperty,
- setSelectedProperty,
+filteredProperties,
+setFilteredProperties,
 
- filteredProperties,
- setFilteredProperties,
+selectedProperty,
+setSelectedProperty,
 
- savedSearches,
- setSavedSearches
+savedProperties,
+saveProperty
 
 }}>
 

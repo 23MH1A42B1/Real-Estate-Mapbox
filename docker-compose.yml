@@ -3,20 +3,28 @@ version: '3.8'
 services:
 
   app:
+
     build: .
+
     ports:
       - "3006:3006"
+
     environment:
-      - VITE_MAPBOX_ACCESS_TOKEN=${VITE_MAPBOX_ACCESS_TOKEN}
+      - VITE_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
 
   puppeteer-integration-tests:
+
     build:
       context: .
       dockerfile: Dockerfile.test
+
     depends_on:
       - app
+
     environment:
       - APP_URL=http://app:3006
+
     volumes:
       - ./test-results:/app/test-results
+
     command: npm run test:integration
