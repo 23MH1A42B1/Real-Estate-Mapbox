@@ -1,55 +1,165 @@
 # Real Estate Property Finder with Mapbox Geospatial Testing
 
-A full-featured real estate web application built with React, Mapbox GL JS, Puppeteer, and Docker. This project allows users to search, filter, and interact with property listings using advanced geospatial features.
+A full-featured real estate web application built using React, Mapbox GL JS, Puppeteer, and Docker. This platform allows users to explore property listings on an interactive map, apply advanced geospatial filters, and perform automated integration testing.
+
+This project is designed to demonstrate real-world frontend development, geospatial data handling, and integration testing.
 
 ---
 
-## 🚀 Features
+## Features
 
-### Core Functionality
-* **Interactive Mapbox Map:** Real-time property markers and synchronization.
-* **Synced Sidebar:** Property listings stay in sync with the current map view.
-* **Advanced Search:** Location autocomplete via Mapbox Geocoding API.
-* **Geospatial Filtering:** Radius-based filtering using the Haversine formula:
-    $$d = 2r \arcsin\left(\sqrt{\sin^2\left(\frac{\phi_2 - \phi_1}{2}\right) + \cos(\phi_1) \cos(\phi_2) \sin^2\left(\frac{\lambda_2 - \lambda_1}{2}\right)}\right)$$
-* **Polygon Search:** Custom boundary search using Mapbox Draw.
-* **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
+### Core Features
 
-### Testing & QA
-* **Puppeteer Integration:** End-to-end testing for map initialization.
-* **Interaction Testing:** Automated validation of autocomplete and marker clicks.
-* **Logic Verification:** Specialized tests for radius filtering and saved searches.
-
-### DevOps & Deployment
-* **Dockerized:** Fully containerized environment for consistency.
-* **CI/CD Ready:** Automated integration test execution via Docker Compose.
+- Interactive Mapbox map with property markers
+- Property listing sidebar synchronized with map
+- Location autocomplete search
+- Radius-based property filtering using Haversine formula
+- Polygon boundary search using Mapbox Draw
+- Property detail page with map and coordinates
+- Nearby amenities with distance calculation
+- Save property functionality using local storage
+- Responsive design for desktop and mobile devices
 
 ---
 
-## 🛠 Tech Stack
+### Testing Features
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend** | React, Vite, Mapbox GL JS, Mapbox GL Draw |
-| **Testing** | Puppeteer, Jest |
-| **DevOps** | Docker, Docker Compose |
+- Puppeteer integration tests
+- Automated map initialization test
+- Location autocomplete test
+- Geospatial radius filtering test
+- Map marker interaction test
+- Property filtering test
+- Saved searches test
 
 ---
 
-## 📂 Project Structure
+### DevOps Features
 
-```text
+- Fully Dockerized application
+- Docker Compose setup
+- Automated test execution inside Docker
+- Environment variable configuration
+- Test results generation
+
+---
+
+## Tech Stack
+
+Frontend:
+- React
+- Vite
+- JavaScript
+- CSS
+
+Geospatial:
+- Mapbox GL JS
+- Mapbox Geocoding API
+- Mapbox Draw Plugin
+
+Testing:
+- Puppeteer
+- Jest
+
+DevOps:
+- Docker
+- Docker Compose
+
+---
+
+## Project Structure
+
 real-estate-mapbox/
+│
 ├── src/
-│   ├── components/    # Reusable UI elements
-│   ├── pages/         # Main view logic
-│   ├── context/       # State management
-│   ├── utils/         # Geospatial helpers
-│   ├── styles/        # CSS/SCSS files
-│   └── data/          # Mock property data
+│ ├── components/
+│ ├── pages/
+│ ├── context/
+│ ├── data/
+│ ├── utils/
+│ └── styles/
+│
 ├── tests/
-│   └── integration/   # Puppeteer test suites
-├── Dockerfile         # App container
-├── Dockerfile.test    # Test environment container
-├── docker-compose.yml # Orchestration
-└── package.json       # Dependencies
+│ └── integration/
+│
+├── test-results/
+│
+├── Dockerfile
+├── Dockerfile.test
+├── docker-compose.yml
+├── package.json
+├── .env.example
+└── README.md
+
+
+---
+
+## Dataset
+
+The application uses a mock dataset containing 30+ properties distributed across:
+
+- San Francisco
+- Los Angeles
+- New York
+
+Each property includes:
+
+- ID
+- Title
+- Price
+- Address
+- Coordinates
+- Bedrooms
+- Bathrooms
+- Property type
+- Description
+
+---
+
+## Environment Setup
+
+Create a `.env` file in the root directory:
+
+VITE_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token_here
+
+
+---
+
+## Running Locally
+
+Install dependencies:
+
+npm install
+
+
+Start development server:
+
+npm run dev
+
+
+Open in browser:
+
+http://localhost:5173/properties
+
+
+---
+
+## Running with Docker
+
+Build and start containers:
+
+docker-compose up --build
+
+
+Application will run at:
+
+http://localhost:3006
+
+
+---
+
+## Running Integration Tests
+
+Run inside Docker:
+
+docker-compose exec puppeteer-integration-tests npm run test:integration
